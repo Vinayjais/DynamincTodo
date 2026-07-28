@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "895524165123",
+    "project_id": "authusers-941a2",
+    "storage_bucket": "authusers-941a2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:895524165123:android:7378baf5842176b69e6036",
+        "android_client_info": {
+          "package_name": "com.vinayjaiswal.todolist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaihUkaPixnE1q8kIWK3FWqHigG8YsBfw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

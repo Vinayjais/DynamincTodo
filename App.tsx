@@ -8,7 +8,18 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar, Text, useColorScheme, LogBox, View, StyleSheet } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
+import { initializeApp } from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+const firebaseConfig = {
+  apiKey: process.env.FIREBASE_API_KEY || 'your_api_key_here',
+  appId: process.env.FIREBASE_APP_ID || 'your_app_id_here',
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || 'your_messaging_sender_id_here',
+  projectId: process.env.FIREBASE_PROJECT_ID || 'your_project_id_here',
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN || 'your_auth_domain_here',
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET || 'your_storage_bucket_here',
+};
 import { NavigationContainer } from '@react-navigation/native';
 import { navigationRef } from './utils/NavigationService';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -19,11 +30,15 @@ import { Provider } from 'react-redux';
 import { store, persistor } from './store/store';
 import { PersistGate } from 'redux-persist/integration/react';
 const Stack = createNativeStackNavigator();
-LogBox.ignoreAllLogs()
+LogBox.ignoreAllLogs();
+
+initializeApp(firebaseConfig);
+
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
   const [lastOfflineAt, setLastOfflineAt] = useState<number | null>(null);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
@@ -32,6 +47,14 @@ function App() {
       if (!connected) setLastOfflineAt(Date.now());
     });
     return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(currentUser => {
+      setUser(currentUser);
+    });
+
+    return subscriber;
   }, []);
 
   return (
@@ -49,7 +72,9 @@ function App() {
           )}
           <NavigationContainer ref={navigationRef}>
             <Stack.Navigator initialRouteName='Home'>
-              <Stack.Screen name="Home" component={Home} options={{ title: 'Home' }} />
+              <Stack.Screen name="Home" options={{ title: 'Home' }}>
+                {props => <Home {...props} user={user} />}
+              </Stack.Screen>
               <Stack.Screen name="TodoListGroups" component={TodoListGroups} options={{ title: 'Todo Lists' }} />
               <Stack.Screen name="DynamicTodo" component={DynamicTodo} options={{ title: 'Dynamic Todo' }} />
             </Stack.Navigator>

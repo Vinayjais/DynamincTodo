@@ -69,6 +69,7 @@ export default function Home({ user }: HomeProps) {
                         placeholder="Email"
                         value={email}
                         onChangeText={setEmail}
+                        placeholderTextColor="#888"
                         autoCapitalize="none"
                         keyboardType="email-address"
                     />
@@ -77,6 +78,8 @@ export default function Home({ user }: HomeProps) {
                         style={styles.input}
                         placeholder="Password"
                         value={password}
+                        placeholderTextColor="#888"
+                        autoCapitalize="none"
                         onChangeText={setPassword}
                         secureTextEntry
                     />
